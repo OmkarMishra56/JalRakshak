@@ -35,8 +35,6 @@ CELL = 0.03
 
 
 def ward_polygon(index: int):
-    """Simple grid-tiled square polygons so the demo city is a clean 4x2 grid
-    with no gaps (keeps the routing zone-adjacency graph well-connected)."""
     col = index % GRID_COLS
     row = index // GRID_COLS
     lng0 = CITY_LNG + col * CELL
