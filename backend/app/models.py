@@ -1,11 +1,4 @@
-"""
-SQLAlchemy ORM models.
 
-Geometry columns use GeoAlchemy2's Geometry type backed by PostGIS.
-- Zone.geom            -> POLYGON (ward/zone boundary), SRID 4326 (WGS84 lat/lng)
-- Report.location       -> POINT, SRID 4326
-- Sensor.location       -> POINT, SRID 4326
-"""
 import enum
 import uuid
 from datetime import datetime
@@ -32,9 +25,9 @@ class UserRole(str, enum.Enum):
 
 
 class ZoneStatus(str, enum.Enum):
-    safe = "safe"          # score < threshold_moderate
-    moderate = "moderate"  # threshold_moderate <= score < threshold_severe
-    severe = "severe"      # score >= threshold_severe
+    safe = "safe"          
+    moderate = "moderate"  
+    severe = "severe"      
 
 
 class User(Base):
@@ -62,14 +55,13 @@ class Zone(Base):
 
     id = Column(UUID(as_uuid=False), primary_key=True, default=gen_uuid)
     name = Column(String, nullable=False)
-    code = Column(String, unique=True, nullable=False)  # e.g. "WARD-12"
+    code = Column(String, unique=True, nullable=False)  
     geom = Column(Geometry(geometry_type="POLYGON", srid=4326), nullable=False)
     centroid_lat = Column(Float, nullable=False)
     centroid_lng = Column(Float, nullable=False)
 
-    # Drainage / historical metadata used for the sparse-data fallback prior
-    historical_flood_prior = Column(Float, default=10.0)  # baseline risk 0-100 from past history
-
+    
+    historical_flood_prior = Column(Float, default=10.0)  
     current_score = Column(Float, default=0.0, nullable=False)
     current_status = Column(Enum(ZoneStatus), default=ZoneStatus.safe, nullable=False)
     score_updated_at = Column(DateTime(timezone=True), server_default=func.now())
@@ -79,10 +71,7 @@ class Zone(Base):
     weather_snapshots = relationship("WeatherSnapshot", back_populates="zone")
     score_history = relationship("ZoneScoreHistory", back_populates="zone")
 
-    # NOTE: no explicit GIST index declared here -- GeoAlchemy2's Geometry
-    # type creates one automatically (spatial_index=True by default, named
-    # idx_zones_geom). Declaring it again here caused a DuplicateTableError.
-
+    
 
 class Report(Base):
     """
@@ -100,22 +89,20 @@ class Report(Base):
     lat = Column(Float, nullable=False)
     lng = Column(Float, nullable=False)
 
-    water_depth_cm = Column(Float, nullable=False)  # citizen estimate: ankle=10, knee=45, waist=80, chest=120
+    water_depth_cm = Column(Float, nullable=False)  
     photo_url = Column(String, nullable=True)
     note = Column(Text, nullable=True)
 
-    is_verified = Column(Boolean, default=False)          # municipal review verified it's real
-    is_municipal_override = Column(Boolean, default=False)  # created directly by an admin, max weight
-    is_dismissed = Column(Boolean, default=False)          # municipal marked as false/spam
+    is_verified = Column(Boolean, default=False)          
+    is_municipal_override = Column(Boolean, default=False)  
+    is_dismissed = Column(Boolean, default=False)       
 
-    source_ip = Column(String, nullable=True)  # for rate limiting / anti-spam, not exposed via API
+    source_ip = Column(String, nullable=True)  
     created_at = Column(DateTime(timezone=True), server_default=func.now(), index=True)
 
     zone = relationship("Zone", back_populates="reports")
     reporter = relationship("User", back_populates="reports")
 
-    # Same note as Zone.geom above -- GeoAlchemy2 auto-creates the GIST index
-    # on `location` (idx_reports_location); only declare the composite index here.
     __table_args__ = (
         Index("idx_reports_zone_created", "zone_id", "created_at"),
     )
@@ -134,7 +121,7 @@ class Sensor(Base):
     location = Column(Geometry(geometry_type="POINT", srid=4326), nullable=False)
     lat = Column(Float, nullable=False)
     lng = Column(Float, nullable=False)
-    api_key = Column(String, nullable=False, unique=True)  # simple per-device shared secret for webhook auth
+    api_key = Column(String, nullable=False, unique=True) 
     is_active = Column(Boolean, default=True)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
 

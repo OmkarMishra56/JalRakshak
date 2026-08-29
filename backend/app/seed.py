@@ -1,10 +1,4 @@
-"""
-Seed script: creates a mock city ("Rainpur") with 8 wards, demo users,
-historical rainfall + score data (last 14 days), a few active sensors, and a
-handful of live citizen reports so the map looks alive immediately on demo.
 
-Run with:  python -m app.seed
-"""
 import asyncio
 import random
 import uuid
@@ -22,11 +16,11 @@ from .scoring import compute_zone_score, apply_score_result
 
 random.seed(42)
 
-# Rough city bounding box (fictional city "Rainpur"), ~ Bengaluru-scale coords
+
 CITY_LAT, CITY_LNG = 12.9716, 77.5946
 
 WARDS = [
-    {"name": "Koramangala", "code": "WARD-01", "prior": 62},   # historically flood-prone
+    {"name": "Koramangala", "code": "WARD-01", "prior": 62},   
     {"name": "Indiranagar", "code": "WARD-02", "prior": 28},
     {"name": "Whitefield", "code": "WARD-03", "prior": 45},
     {"name": "Jayanagar", "code": "WARD-04", "prior": 18},
@@ -37,7 +31,7 @@ WARDS = [
 ]
 
 GRID_COLS = 4
-CELL = 0.03  # ~3.3km per cell, roughly
+CELL = 0.03  
 
 
 def ward_polygon(index: int):
@@ -66,7 +60,7 @@ async def seed():
             print("Database already seeded (zones exist). Skipping.")
             return
 
-        # --- Users ---
+
         citizen = User(
             email="citizen@demo.aquaalert.io", full_name="Demo Citizen",
             hashed_password=hash_password("password123"), role=UserRole.citizen,
@@ -78,7 +72,7 @@ async def seed():
         db.add_all([citizen, admin])
         await db.flush()
 
-        # --- Zones ---
+    
         zones = []
         for i, w in enumerate(WARDS):
             wkt, clat, clng = ward_polygon(i)
@@ -92,12 +86,12 @@ async def seed():
             zones.append(zone)
         await db.flush()
 
-        # --- 14 days of historical weather + score history per zone ---
+    
         now = datetime.now(timezone.utc)
         for zone in zones:
             for day_offset in range(14, 0, -1):
                 day = now - timedelta(days=day_offset)
-                # Random rain event, more likely for flood-prone zones
+    
                 is_rain_day = random.random() < (0.25 + zone.historical_flood_prior / 200)
                 rain_1h = round(random.uniform(5, 45), 1) if is_rain_day else round(random.uniform(0, 2), 1)
                 rain_24h = round(rain_1h * random.uniform(1.5, 4), 1)
@@ -117,7 +111,7 @@ async def seed():
                 ))
         await db.flush()
 
-        # --- Sensors: one per every other zone ---
+
         for zone in zones[::2]:
             sensor = Sensor(
                 zone_id=zone.id, name=f"{zone.code}-DEPTH-SENSOR-1",
@@ -129,7 +123,6 @@ async def seed():
             await db.flush()
             db.add(SensorReading(sensor_id=sensor.id, water_depth_cm=round(random.uniform(2, 20), 1), battery_pct=91))
 
-        # --- A few live citizen reports right now, so the map isn't empty ---
         live_scenarios = [
             (zones[0], 55, False, "Ankle-deep water near the main junction, traffic backing up"),
             (zones[0], 78, True, "Water entering ground-floor shops, verified by ward officer"),
@@ -149,7 +142,6 @@ async def seed():
 
         await db.commit()
 
-        # --- Compute initial live scores for all zones ---
         for zone in zones:
             result = await compute_zone_score(db, zone)
             await apply_score_result(db, zone, result)

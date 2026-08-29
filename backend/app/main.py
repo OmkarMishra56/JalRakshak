@@ -1,17 +1,4 @@
-"""
-AquaAlert FastAPI application entrypoint.
 
-Wires together:
-  - REST routers (auth, zones, reports, sensors, weather, admin, routes)
-  - WebSocket endpoint (/ws/zones) for live map updates
-  - APScheduler background jobs:
-      * periodic "tick" rescoring of every zone (lets old reports decay away
-        even with zero new input, and catches anything missed by event-driven
-        rescoring)
-      * optional real-weather polling (OpenWeatherMap) if OPENWEATHER_API_KEY set
-  - Global rate limiting (slowapi) as a second line of defense on top of the
-    report-specific limiter in routers/reports.py
-"""
 import logging
 from contextlib import asynccontextmanager
 
@@ -68,8 +55,6 @@ async def scoring_tick():
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    # Ensure PostGIS extension + tables exist (idempotent). For production,
-    # prefer Alembic migrations -- this is convenient for local/demo bootstrap.
     async with async_engine.begin() as conn:
         await conn.execute(text("CREATE EXTENSION IF NOT EXISTS postgis"))
         await conn.run_sync(Base.metadata.create_all)

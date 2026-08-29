@@ -1,9 +1,4 @@
 "use client";
-/**
- * Main citizen-facing view: live map dashboard + one-tap report FAB.
- * MapContainer (Leaflet) needs `window`, so it's loaded client-side only via
- * next/dynamic with ssr:false.
- */
 import dynamic from "next/dynamic";
 import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
@@ -35,8 +30,7 @@ export default function HomePage() {
     loadZones();
   }, [loadZones]);
 
-  // Patch just the one zone that changed, in place -- this is what gets the
-  // map updating live with no reload and sub-5s propagation.
+  
   useZoneUpdates((event: ZoneUpdateEvent) => {
     setConnected(true);
     setZones((prev) =>

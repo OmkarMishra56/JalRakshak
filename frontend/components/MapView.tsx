@@ -1,9 +1,4 @@
 "use client";
-/**
- * Live map: renders each zone as a color-coded polygon (green/yellow/red),
- * updates in place via WebSocket (no refetch/reload), and lets the user tap
- * a zone to open the detail panel.
- */
 import { useEffect, useMemo, useRef, useState } from "react";
 import { MapContainer, TileLayer, GeoJSON, CircleMarker, Popup, useMap } from "react-leaflet";
 import type { Zone } from "@/lib/api";
@@ -22,8 +17,6 @@ const STATUS_LABEL: Record<string, string> = {
 };
 
 function FlashOnUpdate({ flashZoneId }: { flashZoneId: string | null }) {
-  // Placeholder hook point for future map-level flash effects (kept simple: the
-  // GeoJSON re-render + CSS pulse on severe zones already communicates change).
   return null;
 }
 

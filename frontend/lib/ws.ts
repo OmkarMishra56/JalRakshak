@@ -1,9 +1,4 @@
 "use client";
-/**
- * Live zone-update WebSocket hook. Connects once, reconnects with backoff on
- * drop, and hands each `zone_update` event to the caller so the map can patch
- * just the one zone that changed (no full refetch, no page reload).
- */
 import { useEffect, useRef } from "react";
 
 const WS_URL = process.env.NEXT_PUBLIC_WS_URL || "ws://localhost:8000/ws/zones";
@@ -42,7 +37,7 @@ export function useZoneUpdates(onUpdate: (event: ZoneUpdateEvent) => void) {
           const data = JSON.parse(event.data);
           if (data.type === "zone_update") onUpdate(data as ZoneUpdateEvent);
         } catch {
-          // ignore malformed frames
+          
         }
       };
 
@@ -63,6 +58,6 @@ export function useZoneUpdates(onUpdate: (event: ZoneUpdateEvent) => void) {
       clearInterval(heartbeat);
       ws?.close();
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    
   }, []);
 }

@@ -1,19 +1,4 @@
-"""
-Real weather API adapter (OpenWeatherMap).
 
-Polls current + 1h rainfall for each zone's centroid on a timer and feeds it
-through the same `/weather/ingest` pipeline that manual/demo data uses --
-so the scoring engine never needs to know or care where the number came from.
-
-To enable: set OPENWEATHER_API_KEY in your .env, then call
-`start_weather_poller(app)` from main.py (already wired in).
-
-Free-tier OpenWeatherMap's "Current Weather" endpoint returns `rain.1h` (mm in
-last hour) directly. 24h accumulation is approximated by keeping a rolling sum
-of our own polled snapshots (since the free tier doesn't expose historical
-accumulation) -- swap in the One Call API's daily summary for a more accurate
-number if you have a paid key (see README).
-"""
 import asyncio
 import logging
 from datetime import datetime, timedelta, timezone

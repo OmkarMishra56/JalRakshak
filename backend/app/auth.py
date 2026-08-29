@@ -1,7 +1,3 @@
-"""
-JWT auth: password hashing, token creation/verification, and FastAPI
-dependencies for role-gated routes (citizen vs municipal_admin vs super_admin).
-"""
 from datetime import datetime, timedelta, timezone
 from typing import Optional
 

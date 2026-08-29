@@ -1,9 +1,4 @@
 "use client";
-/**
- * Slide-in detail panel: recent reports, rainfall trend, and historical prior
- * for a tapped zone. "Tap a zone -> see recent reports, rainfall trend,
- * historical pattern" from the spec.
- */
 import { useEffect, useState } from "react";
 import { api, ZoneDetail } from "@/lib/api";
 

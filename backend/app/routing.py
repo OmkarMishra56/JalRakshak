@@ -1,23 +1,4 @@
-"""
-Basic route suggestion: avoid severe (red) zones.
 
-This is a deliberately lightweight zone-graph pathfinder, not a full road-network
-router (that would need OSRM/GraphHopper + real street data -- see README for how
-to swap this out for one). Here we:
-
-  1. Build a graph where nodes are zone centroids and edges connect zones whose
-     polygons share a border (ST_Touches) or are within a small buffer of each
-     other (handles zones that don't perfectly tile).
-  2. Weight each edge by the *destination* zone's current risk: severe zones cost
-     dramatically more to traverse, moderate zones cost a bit more, safe zones
-     cost their plain distance.
-  3. Run Dijkstra from the start zone to the destination zone.
-  4. Return the ordered list of zone waypoints plus a flag on the whole route:
-     "does this path avoid all severe zones or was one unavoidable".
-
-Good enough to say "go this way, not through the flooded ward" on a live map;
-not a turn-by-turn street router.
-"""
 import heapq
 import math
 from dataclasses import dataclass
@@ -84,7 +65,7 @@ async def suggest_route(db: AsyncSession, start_zone_id: str, end_zone_id: str) 
 
     adjacency = await _build_adjacency(db, zones)
 
-    # Dijkstra
+    
     dist = {z.id: math.inf for z in zones}
     prev: dict[str, str | None] = {z.id: None for z in zones}
     dist[start_zone_id] = 0.0
@@ -107,9 +88,9 @@ async def suggest_route(db: AsyncSession, start_zone_id: str, end_zone_id: str) 
                 heapq.heappush(pq, (nd, v))
 
     if dist[end_zone_id] == math.inf:
-        return None  # no connected path found (disconnected zone graph)
+        return None  
 
-    # Reconstruct path
+    
     path_ids = []
     cur: str | None = end_zone_id
     while cur is not None:

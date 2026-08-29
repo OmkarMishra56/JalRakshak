@@ -4,13 +4,13 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        ink: "#0B1520",       // page background, deep tidal navy
-        panel: "#101E2E",     // card/panel surface
-        panel2: "#16283B",    // raised surface
-        line: "#223247",      // hairline borders
-        mist: "#7C93A8",      // secondary text
-        foam: "#E7EFF5",      // primary text
-        tide: "#2DD4BF",      // signature accent (teal, "current data")
+        ink: "#0B1520",       
+        panel: "#101E2E",     
+        panel2: "#16283B",    
+        line: "#223247",      
+        mist: "#7C93A8",      
+        foam: "#E7EFF5",      
+        tide: "#2DD4BF",      
         safe: "#22C55E",
         moderate: "#F5B93D",
         severe: "#EF4444",

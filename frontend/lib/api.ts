@@ -1,7 +1,4 @@
-/**
- * Thin REST client for the AquaAlert API. Centralizes base URL, auth header
- * injection, and error handling so components stay simple.
- */
+
 export const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
 
 function authHeaders(): Record<string, string> {

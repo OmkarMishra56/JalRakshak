@@ -15,7 +15,7 @@ body {
   color: #E7EFF5;
 }
 
-/* Leaflet dark-map polish */
+
 .leaflet-container {
   background: #0B1520;
   font-family: var(--font-body);
@@ -37,7 +37,6 @@ body {
   color: #7C93A8 !important;
 }
 
-/* subtle ripple animation for the severe-zone pulse */
 @keyframes ripple {
   0% { transform: scale(1); opacity: 0.55; }
   100% { transform: scale(2.4); opacity: 0; }

@@ -1,8 +1,4 @@
 "use client";
-/**
- * One-tap "report waterlogging here" flow: auto-geolocation, a depth slider
- * (with plain-language landmarks: ankle/knee/waist/chest), optional note.
- */
 import { useState } from "react";
 import { api } from "@/lib/api";
 

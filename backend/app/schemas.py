@@ -1,6 +1,3 @@
-"""
-Pydantic request/response schemas.
-"""
 from datetime import datetime
 from typing import Optional
 
@@ -9,13 +6,12 @@ from pydantic import BaseModel, Field, EmailStr
 from .models import UserRole, ZoneStatus
 
 
-# ---------- Auth ----------
 class UserCreate(BaseModel):
     email: EmailStr
     phone: Optional[str] = None
     password: str = Field(min_length=8)
     full_name: Optional[str] = None
-    role: UserRole = UserRole.citizen  # admin creation should be gated separately in production
+    role: UserRole = UserRole.citizen  
 
 
 class UserOut(BaseModel):
@@ -50,7 +46,7 @@ class ZoneOut(BaseModel):
     current_score: float
     current_status: ZoneStatus
     score_updated_at: datetime
-    geojson: dict  # {"type": "Polygon", "coordinates": [...]}
+    geojson: dict  
 
     class Config:
         from_attributes = True
@@ -73,7 +69,6 @@ class ZoneScoreHistoryPoint(BaseModel):
         from_attributes = True
 
 
-# ---------- Reports ----------
 class ReportCreate(BaseModel):
     lat: float
     lng: float
@@ -100,10 +95,9 @@ class ReportOut(BaseModel):
 
 
 class ReportModerate(BaseModel):
-    action: str  # "verify" | "dismiss"
+    action: str  
 
 
-# ---------- Sensors ----------
 class SensorReadingIn(BaseModel):
     water_depth_cm: float = Field(ge=0, le=300)
     battery_pct: Optional[float] = Field(default=None, ge=0, le=100)
@@ -121,7 +115,6 @@ class SensorOut(BaseModel):
         from_attributes = True
 
 
-# ---------- Weather ----------
 class WeatherIngest(BaseModel):
     zone_id: str
     rainfall_1h_mm: float
@@ -129,7 +122,6 @@ class WeatherIngest(BaseModel):
     condition: Optional[str] = None
 
 
-# ---------- WebSocket payloads ----------
 class ZoneUpdateEvent(BaseModel):
     type: str = "zone_update"
     zone_id: str
@@ -141,7 +133,6 @@ class ZoneUpdateEvent(BaseModel):
     updated_at: datetime
 
 
-# ---------- Admin analytics ----------
 class ZoneAnalytics(BaseModel):
     zone_id: str
     name: str

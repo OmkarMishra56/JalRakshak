@@ -1,8 +1,5 @@
 "use client";
-/**
- * Municipal/admin dashboard: login, moderation queue (verify/dismiss reports),
- * ranked flood analytics, and a CSV export link for infrastructure planning.
- */
+
 import { useEffect, useState } from "react";
 import { api, API_URL, Report } from "@/lib/api";
 
