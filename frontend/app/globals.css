@@ -1,0 +1,52 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
+
+:root {
+  --font-display: 'Fraunces', serif;
+  --font-body: 'Inter', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+}
+
+body {
+  background-color: #0B1520;
+  color: #E7EFF5;
+}
+
+/* Leaflet dark-map polish */
+.leaflet-container {
+  background: #0B1520;
+  font-family: var(--font-body);
+}
+.leaflet-popup-content-wrapper {
+  background: #101E2E;
+  color: #E7EFF5;
+  border: 1px solid #223247;
+  border-radius: 10px;
+}
+.leaflet-popup-tip {
+  background: #101E2E;
+}
+.leaflet-control-attribution {
+  background: rgba(11, 21, 32, 0.7) !important;
+  color: #7C93A8 !important;
+}
+.leaflet-control-attribution a {
+  color: #7C93A8 !important;
+}
+
+/* subtle ripple animation for the severe-zone pulse */
+@keyframes ripple {
+  0% { transform: scale(1); opacity: 0.55; }
+  100% { transform: scale(2.4); opacity: 0; }
+}
+.zone-pulse {
+  animation: ripple 2.2s ease-out infinite;
+}
+
+::selection {
+  background: #2DD4BF;
+  color: #0B1520;
+}
