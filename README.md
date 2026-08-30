@@ -1,4 +1,4 @@
-# AquaAlert
+# JalRakshak
 
 Real-time, crowd-sourced + sensor-based urban waterlogging visibility. The
 city is divided into zones (wards); each zone has a live 0–100 waterlogging
