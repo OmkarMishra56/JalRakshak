@@ -121,7 +121,7 @@ new is being reported.
 ### Option A — Docker
  
 ```bash
-cp backend/.env.example backend/.env        # edit JWT_SECRET at minimum
+cp backend/.env.example backend/.env        
 cp frontend/.env.local.example frontend/.env.local
 docker compose up --build
 ```
